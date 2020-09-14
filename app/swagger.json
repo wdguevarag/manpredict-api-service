@@ -1,0 +1,23 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "MS4M Health Sense  REST API",
+        "description": "El presente proyecto tienes los servicios REST para la aplicación de TAS de Health sense",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MTI"
+        }
+    },
+    "tags": [
+       
+
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ]
+
+}
