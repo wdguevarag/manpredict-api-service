@@ -6,7 +6,8 @@ export const CONFIG = {
 
 
     SERVER: {
-        PORT: Number(process.env.SERVER_PORT)
+        PORT: Number(process.env.SERVER_PORT),
+        ENV: process.env.ENV
     },
 
     HEALTH_SENSE_DB: {
@@ -19,7 +20,7 @@ export const CONFIG = {
 
     AUTH: {
         JWT_SECRET: process.env.JWT_SECRET == null ? 'seed-desarrolo' : process.env.JWT_SECRET,
-        JWT_EXPIRE: process.env.JWT_EXPIRE == null ? '60 * 60 * 24':process.env.JWT_EXPIRE,
+        JWT_EXPIRE: process.env.JWT_EXPIRE == null ? '60 * 60 * 24' : process.env.JWT_EXPIRE,
     }
 
 }

@@ -24,8 +24,6 @@ export default class AuthController {
             usuario: user_plain
         }, CONFIG.AUTH.JWT_SECRET, { expiresIn: 60 * 60 * 24 })
 
-        console.log(user_plain);
-
         return res.json(
             {
                 user: user?.login_user,

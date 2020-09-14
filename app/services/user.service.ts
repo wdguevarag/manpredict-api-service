@@ -32,7 +32,6 @@ export function UserNotExist(user: User | null | undefined) {
 }
 
 export function PasswordIsNotValid(passInput: string, passUser: string) {
-    console.log(passUser)
     let decrypt = new Decrypt();
     if (decrypt.asciinom(decrypt.decode(passUser)) == passInput) {
         return {

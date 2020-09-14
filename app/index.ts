@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json';
 import chalk from 'chalk';
 import figlet from 'figlet';
+import { CONFIG } from './environment/environment';
 
 
 const server = Server.instance;
@@ -34,19 +35,21 @@ server.app.use('/', routes)
 
 sequelize.authenticate()
     .then(() => {
-        // console.log(chalk.green(figlet.textSync("MS4M - H S", {
-        //     horizontalLayout: "default",
-        //     verticalLayout: "default"
-        // })))
+        if (CONFIG.SERVER.ENV == 'prod') {
+            console.log(chalk.green(figlet.textSync("MS4M - H S", {
+                horizontalLayout: "default",
+                verticalLayout: "default"
+            })))
+        }
 
         console.log(chalk.green(' \u2714 Data Base connected..! '));
 
         server.start(() => {
             server.app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-            console.log( chalk.green(` \u2714 Server corriendo en el puerto ${server.port}`));
+            console.log(chalk.green(` \u2714 Server corriendo en el puerto ${server.port}`));
         });
     }).catch((err) => {
-        console.log(err);
+        console.log(chalk.red(err));
     })
 
 
