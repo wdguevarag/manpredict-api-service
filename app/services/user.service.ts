@@ -1,5 +1,7 @@
 import User from '../entities/User';
 import Decrypt from '../services/decrypt.service';
+import bcrypt from 'bcrypt';
+
 
 
 export function UserAndPasswordIsRequired(user: string, password: string) {
@@ -31,15 +33,16 @@ export function UserNotExist(user: User | null | undefined) {
 
 }
 
-export function PasswordIsNotValid(passInput: string, passUser: string) {
+export function PasswordIsNotValid(passInput: string, passUser: string, id_cs: number | null) {
     let decrypt = new Decrypt();
-    if (decrypt.asciinom(decrypt.decode(passUser)) == passInput) {
-        return {
-            success: true,
-        };
+
+    if (id_cs != null) {
+        return decrypt.asciinom(decrypt.decode(passUser)) == passInput ? { success: true } : { success: false, message: "Pass not valid" }
+    } else {
+        return bcrypt.compareSync(passInput,passUser) ? { success: true } : { success: false, message: "Pass not valid" }
+
     }
-    return {
-        success: false,
-        message: "Pass not valid"
-    }
+
+
+
 }

@@ -15,8 +15,8 @@ export default class AuthController {
         let user: any = await UserRepository.getUserByUser(userName)
         let responseUser = userService.UserNotExist(user)
         if (!responseUser?.success) return res.json({ response: responseUser })
-        let responsePass = userService.PasswordIsNotValid(pass, user == null ? '' : user.pass_user)
-        //if (!responsePass?.success) return res.json({ response: responsePass })
+        let responsePass = userService.PasswordIsNotValid(pass, user == null ? '' : user.pass_user, user.id_cs)
+        if (!responsePass?.success) return res.json({ response: responsePass })
 
         let user_plain = user.get({ plain: true })
         delete user_plain?.pass_user

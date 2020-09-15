@@ -10,7 +10,9 @@ class User extends Model {
     public pass_user!: string;
     public is_activo!: boolean;
     public id_idioma!: number;
-    public id_trabajador!:number;
+    public id_trabajador!: number;
+    public id_cs!: number;
+    public tiem_elimin!: Date;
 }
 
 User.init({
@@ -39,6 +41,14 @@ User.init({
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    id_cs: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    tiem_elimin: {
+        type: new DataTypes.DATE,
+        allowNull: true,
+    },
 
 }, {
     schema: 'public',
@@ -47,8 +57,8 @@ User.init({
     sequelize: sequelize
 });
 
-User.belongsTo(Idioma, {foreignKey: 'id_idioma', as: 'language'});
-User.belongsTo(Trabajador, {foreignKey: 'id_trabajador', as: 'trabajador'});
+User.belongsTo(Idioma, { foreignKey: 'id_idioma', as: 'language' });
+User.belongsTo(Trabajador, { foreignKey: 'id_trabajador', as: 'trabajador' });
 
 
 export default User;
