@@ -1,4 +1,4 @@
-# fatiga - back
+# HS - back
 
 Prerequisito instalar TS (por una sola vez)
 ```
