@@ -5,14 +5,16 @@ export default class EquipmentController {
 
     getFlotasSecByFlotaPr = async (req: Request, res: Response) => {
 
-        let { flotaPr } = req.params;
+        try {
+            let { flotaPr } = req.params;
+            let data = await EquipmentRepository.getFlotaSecByFlotaPr(Number(flotaPr));
+            return res.status(200).json({ success: true, data });
+        }
+        catch (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, err });
 
-        let data = await EquipmentRepository.getFlotaSecByFlotaPr(Number(flotaPr));
-
-
-        return res.json({ flotaPr:data })
-
-
+        }
 
     }
 
