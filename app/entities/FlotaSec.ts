@@ -1,33 +1,28 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../databases/sequelize.connections';
+import Equipo from './Equipo';
 
-export default class Equipo extends Model {
+class FlotaSec extends Model {
 
-    id_equipo!: number;
-    nombre_eq!: string;
     id_flota_sec!: number;
-    ip_equipo_dir!: string;
+    nombre_flota_sec!: string;
+    id_flota_pr!: number;
     tiem_elimin!: Date;
 
 }
 
-Equipo.init({
-    id_equipo: {
+FlotaSec.init({
+    id_flota_sec: {
         type: DataTypes.INTEGER,
         autoIncrement: false,
         primaryKey: true,
     },
-    nombre_eq: {
+    nombre_flota_sec: {
         type: new DataTypes.STRING(100),
         allowNull: false,
     },
-    id_flota_sec: {
+    id_flota_pr: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-
-    ip_equipo_dir: {
-        type: new DataTypes.STRING(100),
         allowNull: false,
     },
     tiem_elimin: {
@@ -39,9 +34,12 @@ Equipo.init({
 
 }, {
     schema: 'public',
-    tableName: "tp_equipos",
+    tableName: "tp_flota_sec",
     timestamps: false,
     sequelize: sequelize
 });
 
+FlotaSec.hasMany(Equipo, {   as: 'equipments' , foreignKey: 'id_flota_sec'});
+
+export default FlotaSec;
 
