@@ -25,12 +25,15 @@ export default class AuthController {
         }, CONFIG.AUTH.JWT_SECRET, { expiresIn: 60 * 60 * 24 })
 
         return res.json(
-            {
+            { response: {
+                success: true,
                 user: user?.login_user,
                 language: user?.language?.cod_iso_idioma,
                 worker: `${user?.trabajador?.nombre_tr} ${user?.trabajador?.apellido_paterno_tr} ${user?.trabajador?.apellido_materno_tr}`,
                 token
-            });
+            }
+    }
+            );
 
     }
 
