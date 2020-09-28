@@ -7,7 +7,8 @@ export const CONFIG = {
 
     SERVER: {
         PORT: Number(process.env.SERVER_PORT),
-        ENV: process.env.ENV
+        ENV: process.env.ENV,
+        HTTPS : Boolean(process.env.HTTPS),
     },
 
     HEALTH_SENSE_DB: {
