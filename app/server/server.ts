@@ -2,14 +2,14 @@ import express from 'express';
 import { CONFIG } from '../environment/environment';
 import socketIO from 'socket.io';
 import http from 'http';
-import https from 'https';
-import fs from 'fs';
-import path from 'path';
+// import https from 'https';
+// import fs from 'fs';
+//import path from 'path';
 
 
 
-const key = fs.readFileSync(path.join(path.resolve('.'), '/cert/key.pem'));
-const cert = fs.readFileSync(path.join(path.resolve('.'), '/cert/cert.pem'));
+//const key = fs.readFileSync(path.join(path.resolve('.'), '/cert/key.pem'));
+//const cert = fs.readFileSync(path.join(path.resolve('.'), '/cert/cert.pem'));
 
 
 export default class Server {
@@ -24,7 +24,7 @@ export default class Server {
     public io: socketIO.Server;
 
     private httpServer: http.Server;
-    private httpsServer: https.Server;
+    //private httpsServer: https.Server;
 
 
     constructor() {
@@ -34,7 +34,7 @@ export default class Server {
         this.port = CONFIG.SERVER.PORT;
 
 
-        this.httpsServer = new https.Server({ key: key, cert: cert }, this.app);
+        //this.httpsServer = new https.Server({ key: key, cert: cert }, this.app);
         this.httpServer = new http.Server(this.app);
 
         this.io = socketIO(this.httpServer)
@@ -50,11 +50,11 @@ export default class Server {
 
     start(callback: any) {
 
-        if (CONFIG.SERVER.HTTPS) {
-            this.httpsServer.listen(this.port, callback);
-        } else {
+        //if (CONFIG.SERVER.HTTPS) {
+        //    this.httpsServer.listen(this.port, callback);
+        //} else {
             this.httpServer.listen(this.port, callback);
-        }
+        //}
 
 
 
