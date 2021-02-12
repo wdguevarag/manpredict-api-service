@@ -36,7 +36,7 @@ server.app.use('/', routes)
 sequelize.authenticate()
     .then(() => {
         if (CONFIG.SERVER.ENV == 'prod') {
-            console.log(chalk.green(figlet.textSync("MS4M - H S", {
+            console.log(chalk.green(figlet.textSync("DatecSoft", {
                 horizontalLayout: "default",
                 verticalLayout: "default"
             })))

@@ -1,12 +1,12 @@
 {
-  "name": "cm_security_service",
+  "name": "api_login",
   "version": "2.0.0",
-  "description": "Healt Sense ",
+  "description": "Manpredict",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "ms4m",
+  "author": "Datectsoft",
   "license": "ISC",
   "dependencies": {
     "alasql": "^0.6.1",

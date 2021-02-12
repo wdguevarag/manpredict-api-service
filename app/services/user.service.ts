@@ -33,16 +33,20 @@ export function UserNotExist(user: User | null | undefined) {
 
 }
 
-export function PasswordIsNotValid(passInput: string, passUser: string, id_cs: number | null) {
+export async function PasswordIsNotValid(passInput: string, passUser: string) {
     let decrypt = new Decrypt();
 
-    if (id_cs != null) {
-        return decrypt.asciinom(decrypt.decode(passUser)) == passInput ? { success: true } : { success: false, message: "Pass not valid" }
-    } else {
-        return bcrypt.compareSync(passInput,passUser) ? { success: true } : { success: false, message: "Pass not valid" }
+    console.log('passInput=> ', passInput)
+    console.log('passUser=> ', passUser)
 
+    const match = await bcrypt.compare(passInput, passUser);
+
+    console.log('MATCH=> ', match)
+
+    return  match ? {success: true} : {
+        success: false,
+        message: "Pass not valid"
     }
-
 
 
 }

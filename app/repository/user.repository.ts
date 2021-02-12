@@ -13,15 +13,9 @@ export default class UserRepository {
         let user = await User.findOne({
             where:
             {
-                login_user: userName,
-                is_activo: true,
-                tiem_elimin: null
-            },
-            include:
-                [
-                    { model: Idioma, as: 'language' },
-                    { model: Trabajador, as: 'trabajador' }
-                ]
+                user_us: userName,
+                is_active: true
+            }
         });
         return user;
     }

@@ -4,32 +4,32 @@ import {QueryTypes} from "sequelize";
 
 export default class UserController {
 
-    load_component_list = async (req: Request, res: Response) => {
+    load_element_list = async (req: Request, res: Response) => {
         try {
 
-            let query = `select * from components order by is_active desc, 5 desc`;
+            let query = `select c.component_name, e.* from elements e left join components c on e.component_id = c.component_id order by e.is_active desc, 9 desc`;
 
-            let components = await sequelize.query(query, {type: QueryTypes.SELECT});
+            let elements = await sequelize.query(query, {type: QueryTypes.SELECT});
 
-            return res.json({success: true, components});
+            return res.json({success: true, elements});
         } catch (err) {
             return res.status(500).json({sucess: false, err});
         }
     }
 
-    insert_component = async (req: Request, res: Response) => {
+    insert_element = async (req: Request, res: Response) => {
 
-        let c = req.body.newComponent;
+        let c = req.body.newElement;
 
-        let query_verify_component = `select count(*) from components where component_name = '${c.componentName.trim()}'`;
-        let query_exist_component = await sequelize.query(query_verify_component, {type: QueryTypes.SELECT});
+        let query_verify_element = `select count(*) from elements where element_name = '${c.elementName.trim()}' or code = '${c.code.trim()}'`;
+        let query_exist_element = await sequelize.query(query_verify_element, {type: QueryTypes.SELECT});
 
         // @ts-ignore
-        if (query_exist_component[0].count > 0) return res.json({success: false, message: 'Componente existente'});
+        if (query_exist_element[0].count > 0) return res.json({success: false, message: 'Nombre de componente y/o código existente'});
 
         else {
             try {
-                let query = `select public.insert_new_component ('${c.componentName.trim()}', true)`;
+                let query = `select public.insert_new_element ('${c.elementName.trim()}','${c.description.trim()}','${c.code.trim()}','${c.component}', true)`;
                 let query_response = await sequelize.query(query, {type: QueryTypes.SELECT});
                 return res.json({success: true, query_response});
             } catch (err) {
@@ -39,24 +39,27 @@ export default class UserController {
 
     }
 
-    update_component = async (req: Request, res: Response) => {
+    update_element = async (req: Request, res: Response) => {
 
-        let c = req.body.editComponent;
-        let c_id = req.body.componentId;
+        let c = req.body.editElement;
+        let c_id = req.body.elementId;
 
-        let query_verify_component = `select * from components where component_name = '${c.componentName.trim()}'`;
-        let query_exist_component = await sequelize.query(query_verify_component, {type: QueryTypes.SELECT});
+        let query_verify_element = `select * from elements where element_name = '${c.elementName.trim()}' or code = '${c.code.trim()}'`;
+        let query_exist_element = await sequelize.query(query_verify_element, {type: QueryTypes.SELECT});
 
-        if (query_exist_component.length > 0 && query_exist_component[0]?.component_id !== c_id)
-            return res.json({success: false, message: 'Componente existente'});
+        if (query_exist_element.length > 0 && query_exist_element[0]?.element_id !== c_id)
+            return res.json({success: false, message: 'Nombre de componente y/o código existente'});
 
         else {
             try {
                 let query =
-                    `update components set 
-                            component_name = '${c.componentName}',
+                    `update elements set 
+                            element_name = '${c.elementName}',
+                            description = '${c.description}',
+                            component_id = '${c.component}',
+                            code = '${c.code}',
                             update_time = now()
-                     where component_id = ${c_id}`
+                     where element_id = ${c_id}`
 
                 let query_response = await sequelize.query(query, {type: QueryTypes.UPDATE});
 
@@ -68,17 +71,17 @@ export default class UserController {
         }
     }
 
-    enable_component = async (req: Request, res: Response) => {
+    enable_element = async (req: Request, res: Response) => {
 
-        let c_id = req.body.componentId;
+        let c_id = req.body.elementId;
         let isActive = req.body.status;
 
         try {
 
-            let query = `update components set 
+            let query = `update elements set 
                                     is_active = '${isActive}',
                                     update_time = now()
-                             where component_id = ${c_id}`;
+                             where element_id = ${c_id}`;
 
             let users = await sequelize.query(query, {type: QueryTypes.UPDATE});
 

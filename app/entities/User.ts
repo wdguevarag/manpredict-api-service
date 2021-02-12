@@ -1,64 +1,42 @@
 import { Model, DataTypes } from 'sequelize';
-import Idioma from './Idioma';
 import sequelize from '../databases/sequelize.connections';
-import Trabajador from './Trabajor';
 
 class User extends Model {
 
-    public id_usuario!: number;
-    public login_user!: string;
-    public pass_user!: string;
-    public is_activo!: boolean;
-    public id_idioma!: number;
-    public id_trabajador!: number;
-    public id_cs!: number;
-    public tiem_elimin!: Date;
+    public user_id!: number;
+    public user_us!: string;
+    public pass_us!: string;
+    public is_active!: boolean;
 }
 
 User.init({
-    id_usuario: {
+    user_id: {
         type: DataTypes.INTEGER,
         autoIncrement: false,
         primaryKey: true,
     },
-    login_user: {
+    user_us: {
         type: new DataTypes.STRING(100),
         allowNull: false,
     },
-    pass_user: {
+    pass_us: {
         type: new DataTypes.STRING(100),
         allowNull: false,
     },
-    is_activo: {
+    is_active: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
     },
-    id_idioma: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    id_trabajador: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    id_cs: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    tiem_elimin: {
+    update_time: {
         type: new DataTypes.DATE,
         allowNull: true,
-    },
+    }
 
 }, {
     schema: 'public',
-    tableName: "tp_usuario",
+    tableName: "users",
     timestamps: false,
     sequelize: sequelize
 });
-
-User.belongsTo(Idioma, { foreignKey: 'id_idioma', as: 'language' });
-User.belongsTo(Trabajador, { foreignKey: 'id_trabajador', as: 'trabajador' });
-
 
 export default User;

@@ -4,45 +4,45 @@ import {QueryTypes} from "sequelize";
 
 export default class UserController {
 
-    load_component_list = async (req: Request, res: Response) => {
+    load_fleet_list = async (req: Request, res: Response) => {
         try {
 
-            let query = `select * from components order by is_active desc, 5 desc`;
+            let query = `select * from fleets order by is_active desc, 5 desc`;
 
-            let components = await sequelize.query(query, {type: QueryTypes.SELECT});
+            let fleets = await sequelize.query(query, {type: QueryTypes.SELECT});
 
-            return res.json({success: true, components});
+            return res.json({success: true, fleets});
         } catch (err) {
             return res.status(500).json({sucess: false, err});
         }
     }
 
-    load_component_list_to_select = async (req: Request, res: Response) => {
+    load_fleet_list_to_select = async (req: Request, res: Response) => {
         try {
 
-            let query = `select * from components where is_active is true order by component_name asc`;
+            let query = `select * from fleets where is_active is true order by fleet_name asc`;
 
-            let components = await sequelize.query(query, {type: QueryTypes.SELECT});
+            let fleets = await sequelize.query(query, {type: QueryTypes.SELECT});
 
-            return res.json({success: true, components});
+            return res.json({success: true, fleets});
         } catch (err) {
             return res.status(500).json({sucess: false, err});
         }
     }
 
-    insert_component = async (req: Request, res: Response) => {
+    insert_fleet = async (req: Request, res: Response) => {
 
-        let c = req.body.newComponent;
+        let c = req.body.newFleet;
 
-        let query_verify_component = `select count(*) from components where component_name = '${c.componentName.trim()}'`;
-        let query_exist_component = await sequelize.query(query_verify_component, {type: QueryTypes.SELECT});
+        let query_verify_fleet = `select count(*) from fleets where fleet_name = '${c.fleetName.trim()}'`;
+        let query_exist_fleet = await sequelize.query(query_verify_fleet, {type: QueryTypes.SELECT});
 
         // @ts-ignore
-        if (query_exist_component[0].count > 0) return res.json({success: false, message: 'Componente existente'});
+        if (query_exist_fleet[0].count > 0) return res.json({success: false, message: 'Fleet existente'});
 
         else {
             try {
-                let query = `select public.insert_new_component ('${c.componentName.trim()}', true)`;
+                let query = `select public.insert_new_fleet ('${c.fleetName.trim()}', true)`;
                 let query_response = await sequelize.query(query, {type: QueryTypes.SELECT});
                 return res.json({success: true, query_response});
             } catch (err) {
@@ -52,24 +52,24 @@ export default class UserController {
 
     }
 
-    update_component = async (req: Request, res: Response) => {
+    update_fleet = async (req: Request, res: Response) => {
 
-        let c = req.body.editComponent;
-        let c_id = req.body.componentId;
+        let c = req.body.editFleet;
+        let c_id = req.body.fleetId;
 
-        let query_verify_component = `select * from components where component_name = '${c.componentName.trim()}'`;
-        let query_exist_component = await sequelize.query(query_verify_component, {type: QueryTypes.SELECT});
+        let query_verify_fleet = `select * from fleets where fleet_name = '${c.fleetName.trim()}'`;
+        let query_exist_fleet = await sequelize.query(query_verify_fleet, {type: QueryTypes.SELECT});
 
-        if (query_exist_component.length > 0 && query_exist_component[0]?.component_id !== c_id)
-            return res.json({success: false, message: 'Componente existente'});
+        if (query_exist_fleet.length > 0 && query_exist_fleet[0]?.fleet_id !== c_id)
+            return res.json({success: false, message: 'Fleet existente'});
 
         else {
             try {
                 let query =
-                    `update components set 
-                            component_name = '${c.componentName}',
+                    `update fleets set 
+                            fleet_name = '${c.fleetName}',
                             update_time = now()
-                     where component_id = ${c_id}`
+                     where fleet_id = ${c_id}`
 
                 let query_response = await sequelize.query(query, {type: QueryTypes.UPDATE});
 
@@ -81,28 +81,21 @@ export default class UserController {
         }
     }
 
-    enable_component = async (req: Request, res: Response) => {
+    enable_fleet = async (req: Request, res: Response) => {
 
-        let c_id = req.body.componentId;
+        let c_id = req.body.fleetId;
         let isActive = req.body.status;
 
         try {
 
-            let query = `update components set 
+            let query = `update fleets set 
                                     is_active = '${isActive}',
                                     update_time = now()
-                             where component_id = ${c_id}`;
+                             where fleet_id = ${c_id}`;
 
             let users = await sequelize.query(query, {type: QueryTypes.UPDATE});
 
-            let queryEl = `update elements set 
-                                    is_active = '${isActive}',
-                                    update_time = now()
-                             where component_id = ${c_id}`;
-
-            let usersEl = await sequelize.query(queryEl, {type: QueryTypes.UPDATE});
-
-            return res.json({success: true, users, usersEl});
+            return res.json({success: true, users});
         } catch (err) {
             return res.status(500).json({sucess: false, err});
         }

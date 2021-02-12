@@ -13,12 +13,15 @@ export default class AuthController {
         let response = userService.UserAndPasswordIsRequired(userName, pass);
         if (!response?.success) { return res.json({ response }) }
         let user: any = await UserRepository.getUserByUser(userName)
+
         let responseUser = userService.UserNotExist(user)
+
         if (!responseUser?.success) return res.json({ response: responseUser })
-        let responsePass = userService.PasswordIsNotValid(pass, user == null ? '' : user.pass_user, user.id_cs)
+        let responsePass = await userService.PasswordIsNotValid(pass, user == null ? '' : user.pass_us)
         if (!responsePass?.success) return res.json({ response: responsePass })
 
         let user_plain = user.get({ plain: true })
+
         delete user_plain?.pass_user
         let token = jwt.sign({
             usuario: user_plain
@@ -27,9 +30,8 @@ export default class AuthController {
         return res.json(
             { response: {
                 success: true,
-                user: user?.login_user,
-                language: user?.language?.cod_iso_idioma,
-                worker: `${user?.trabajador?.nombre_tr} ${user?.trabajador?.apellido_paterno_tr} ${user?.trabajador?.apellido_materno_tr}`,
+                user: user?.user,
+                worker: `${user?.user}`,
                 token
             }
     }
